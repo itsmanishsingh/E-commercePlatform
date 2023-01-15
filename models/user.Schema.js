@@ -1,5 +1,10 @@
 import mongoose, { model } from "mongoose";
 import AuthRoles from '../utils/authRoles';
+import bcrypt from 'bcryptjs';
+import { Jwt } from "jsonwebtoken";
+import crypto from "crypto";
+
+
 /*
  const userSchema = new mongoose.Schema({})
 The above and below code are the same ie the "new" word is optional
@@ -37,5 +42,15 @@ const userSchema = mongoose.Schema(
         timestamps : true
     }
 );
+
+// Challenge-1 Encrypt the password
+
+userSchema.pre("Save", async function(next){           // We are encrypting the password before "saving" 
+    if(!this.modified("password"))return next();        // In case the modified save is only for the name then this will return next() , if the modified save is for password only then the loop will move further for the hashing purpose and follow by next() funciton will execute
+    this.password = await bcrypt.hash( this.password , 10);
+    next();
+})
+
+
 
 module.exports = mongoose.model("User",userSchema)
