@@ -47,7 +47,7 @@ const userSchema = mongoose.Schema(
 // Challenge-1 Encrypt the password - hooks
 
 userSchema.pre("Save", async function(next){           // We are encrypting the password before "saving" 
-    if(!this.modified("password"))return next();       // In this case if the password is not modified then move directly to the next();// If the modified is true i.e the password is modified then execute the code below
+    if(!this.isModified("password"))return next();       // In this case if the password is not modified then move directly to the next();// If the modified is true i.e the password is modified then execute the code below
     // if(this.modified("password")){}  // Here if the password is modified then only move to the code below or else directly skip to next();
     this.password = await bcrypt.hash( this.password , 10);
     next();
