@@ -73,8 +73,23 @@ userSchema.methods = {
                 expiresIn:config.JWT_EXPIRY
             }
         )
-    }
+    },
 
+    //Generating a long string using crypto package and the package is send to db and user
+    generateForgotPasswordToken : function(){
+        const forgotToken = crypto.randomBytes(20).toString('hex');
+
+        //step-1 send the data To Database 
+        //"The below code is used to incrypt the string and the code is almost same"
+        this.forgotPasswordToken = crypto.createHash("Sha256")
+                                         .update(forgotToken)
+                                         .digest("hex");
+
+        this.forgotPasswordExpiry = Date.now() + 20*60*1000;
+
+        // Step-2 return to user
+        return forgotToken;
+    }
 }
 
 
