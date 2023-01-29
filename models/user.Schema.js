@@ -90,6 +90,7 @@ userSchema.methods = {
         // Step-2 return to user
         return forgotToken;
     }
+    
 }
 
 
