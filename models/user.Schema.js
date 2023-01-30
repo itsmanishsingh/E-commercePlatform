@@ -5,7 +5,6 @@ import { Jwt } from "jsonwebtoken";
 import crypto from "crypto";
 import config from "../config/index";
 
-
 /*
  const userSchema = new mongoose.Schema({})
 The above and below code are the same ie the "new" word is optional
@@ -80,7 +79,7 @@ userSchema.methods = {
         const forgotToken = crypto.randomBytes(20).toString('hex');
 
         //step-1 send the data To Database 
-        //"The below code is used to incrypt the string and the code is almost same"
+        //"The below code is used to encrypt the string and the code is almost same"
         this.forgotPasswordToken = crypto.createHash("Sha256")
                                          .update(forgotToken)
                                          .digest("hex");
