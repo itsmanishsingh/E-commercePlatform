@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { model } from "mongoose";
 
 const CouponSchema = new mongoose.Schema(
     {
@@ -20,3 +20,5 @@ const CouponSchema = new mongoose.Schema(
     }
 
 )
+
+export default mongoose.model("Coupon",CouponSchema);
