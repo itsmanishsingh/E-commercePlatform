@@ -1,7 +1,7 @@
 import mongoose, { model } from "mongoose";
 import AuthRoles from '../utils/authRoles';
 import bcrypt from 'bcryptjs';
-import { Jwt } from "jsonwebtoken";
+import JWT from "jsonwebtoken";
 import crypto from "crypto";
 import config from "../config/index";
 
