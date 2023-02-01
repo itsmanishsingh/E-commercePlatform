@@ -91,3 +91,33 @@ export const login = asyncHandler(async (req,res) =>{
     throw new CustomError(`Invalid Credentials` , 400)
 
 })
+
+/******************************************************
+ * @LOGOUT
+ * @route http://localhost:5000/api/auth/logout
+ * @description User login Controller for creating new user
+ * @parameters 
+ * @returns Success
+ ******************************************************/
+
+export const logout = asyncHandler(async ( req, res)=>{
+    // res.clearCookie() - this also cleares the cookies
+    res.cookie("token" ,null ,{
+        expires : new Date(Date.now()),
+        httpOnly:true
+    })
+
+    res.status(200).json({
+        success:true,
+        message:"Logged Out"
+    })
+
+})
+
+/******************************************************
+ * @FORGOT_PASSWORD
+ * @route http://localhost:5000/api/auth/password/forgot
+ * @description User will submit email and we will generate a token
+ * @parameters  email
+ * @returns success message - email send
+ ******************************************************/
