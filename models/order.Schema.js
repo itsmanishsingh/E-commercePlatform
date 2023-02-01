@@ -33,8 +33,12 @@ const orderSchema = new mongoose.Schema(
             type:Number,
             required:true
         },
-        coupon: String,
-        transactionId:Number,
+        coupon:{ 
+            type:String
+        },
+        transactionId:{ 
+            type:Number
+        },
         status:{
             type:String,
             enum:Object.values(DeliveryStatus),
