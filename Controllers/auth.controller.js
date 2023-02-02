@@ -2,10 +2,11 @@ import User from "../models/user.Schema"
 import asyncHandler from "../services/asyncHandler"
 import CustomError from "../utils/customError"
 import crypto from 'crypto';
+import mailHelper from '../utils/mailHelper'
 
 
 export const cookieOptions ={
-    expires:new Date(Date.now()+ 3 * 24 * 60 * 60 * 1000)    ,
+    expires:new Date(Date.now()+ 3 * 24 * 60 * 60 * 1000),
     httpOnly:true
     //Could be in a seperate files in utils
 }
@@ -40,7 +41,7 @@ export const signUp = asyncHandler(async (req,res)=>{
 
         const token = user.getJwtToken();
         console.log(user);
-        user.password = undefined; //already in the user.Schema the password has been marked "select: false"
+        user.password = undefined; //already in the user.Schema the password has been marked "select: false",for extra precaution
 
         res.cookie("token" , token , cookieOptions); // The first token is name ,second token is the above token "user.getJwtToken"
 
@@ -100,7 +101,7 @@ export const login = asyncHandler(async (req,res) =>{
  * @returns Success
  ******************************************************/
 
-export const logout = asyncHandler(async ( req, res)=>{
+export const logout = asyncHandler(async ( _req, res)=>{
     // res.clearCookie() - this also cleares the cookies
     res.cookie("token" ,null ,{
         expires : new Date(Date.now()),
@@ -121,3 +122,41 @@ export const logout = asyncHandler(async ( req, res)=>{
  * @parameters  email
  * @returns success message - email send
  ******************************************************/
+
+export const forgotPassword = asyncHandler( async ( req, res)=>{
+
+    const { email } = req.body
+    if(!email ){
+        throw new CustomError(`Please provide the email`)
+    }
+
+    const user = await User.findOne({ email })
+    if(!user){
+        throw new CustomError(`User not found`,400)
+    }
+
+    const resetToken = user.generateForgotPasswordToken()
+
+    await user.save({validateBeforeSave:false})
+
+    const resetUrl = `${req.protocol}://${req.get("host")}/api/auth/password/reset/${resetToken}`
+    
+    const textmessage = `Your password reset url is  \n\n  ${resetUrl}   \n\n`
+    try {
+        await mailHelper({
+            email:user.email,
+            subject:"Password reset mail sent ",
+            text:textmessage
+        })
+        
+    } catch (err) {
+        user.forgotPasswordToken = undefined
+        user.forgotPasswordExpiry = undefined
+
+        await user.save({validateBeforeSave:false})
+
+        throw new CustomError(err.message || `Email sent failure`,401);
+    }
+
+
+})
