@@ -160,3 +160,59 @@ export const forgotPassword = asyncHandler( async ( req, res)=>{
 
 
 })
+
+/******************************************************
+ * @RESET_PASSWORD
+ * @route http://localhost:5000/api/auth/password/reset/:resetToken
+ * @description User will be able to reset Password based on url token
+ * @parameters  token from url ,password and confirm password
+ * @returns user object
+ ******************************************************/
+
+
+export const resetPassword = asyncHandler( async ( req, res )=>{
+    const {token :resetToken } = req.params
+    const { password , confirmPassword } = req.body
+
+    const resetPasswordToken = crypto
+                              .createHash('sha256')
+                              .update(resetToken)
+                              .digest('hex')
+
+    //User.findOne({ email })
+
+    User.findOne({
+        forgotPasswordToken:resetPasswordToken,
+        forgotPasswordExpiry: {$gt: Date.now()}
+    });
+
+    if(!user){
+        throw new CustomError(`Password is invalid or expired`,400)
+    }
+
+    if(password != confirmPassword){
+        throw new CustomError(`Confirm password and password doesnot match`,400)
+    }
+
+    user.password = password
+    user.forgotPasswordToken = undefined
+    user.forgotPasswordExpiry = undefined
+
+    await user.save()
+
+    // Creating a token and sending as response
+    const token = getJwtToken()
+    user.password = undefined
+
+    res.cookie("token",token , cookieOptions)
+    res.status(200).json({
+        success:true,
+        user
+    })
+
+})
+
+
+ // TDDO : Create a controller for password change
+
+ 
