@@ -174,6 +174,7 @@ export const resetPassword = asyncHandler( async ( req, res )=>{
     const {token :resetToken } = req.params
     const { password , confirmPassword } = req.body
 
+    // Encrypting the token 
     const resetPasswordToken = crypto
                               .createHash('sha256')
                               .update(resetToken)
@@ -181,7 +182,7 @@ export const resetPassword = asyncHandler( async ( req, res )=>{
 
     //User.findOne({ email })
 
-    User.findOne({
+    const user = User.findOne({
         forgotPasswordToken:resetPasswordToken,
         forgotPasswordExpiry: {$gt: Date.now()}
     });
@@ -198,7 +199,7 @@ export const resetPassword = asyncHandler( async ( req, res )=>{
     user.forgotPasswordToken = undefined
     user.forgotPasswordExpiry = undefined
 
-    await user.save()
+    await user.save()         // In the user.save() -- includes the encryting the password also
 
     // Creating a token and sending as response
     const token = getJwtToken()
@@ -215,4 +216,24 @@ export const resetPassword = asyncHandler( async ( req, res )=>{
 
  // TDDO : Create a controller for password change
 
- 
+/******************************************************
+ * @GET_PROFILE
+ * @REQUEST_TYPE GET
+ * @route http://localhost:5000/api/auth/profile
+ * @description check for token and populate req.user
+ * @parameters 
+ * @returns User Object
+ ******************************************************/
+
+export const getProfile = asyncHandler ( async (req,res)=>{
+    const {user} = req
+
+    if(!user)
+    throw new CustomError(`User not found ` , 404)
+
+    res.status(201).json({
+        success:true,
+        user
+    })
+
+})
