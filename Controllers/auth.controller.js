@@ -95,6 +95,7 @@ export const login = asyncHandler(async (req,res) =>{
 
 /******************************************************
  * @LOGOUT
+ * @REQUEST_TYPE GET
  * @route http://localhost:5000/api/auth/logout
  * @description User login Controller for creating new user
  * @parameters 
@@ -117,6 +118,7 @@ export const logout = asyncHandler(async ( _req, res)=>{
 
 /******************************************************
  * @FORGOT_PASSWORD
+ * @REQUEST_TYPE POST
  * @route http://localhost:5000/api/auth/password/forgot
  * @description User will submit email and we will generate a token
  * @parameters  email
@@ -162,7 +164,8 @@ export const forgotPassword = asyncHandler( async ( req, res)=>{
 })
 
 /******************************************************
- * @RESET_PASSWORD
+ * @RESET_PASSWORD  
+ * @REQUEST_TYPE POST
  * @route http://localhost:5000/api/auth/password/reset/:resetToken
  * @description User will be able to reset Password based on url token
  * @parameters  token from url ,password and confirm password
