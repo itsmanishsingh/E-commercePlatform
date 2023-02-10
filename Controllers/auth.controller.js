@@ -1,7 +1,7 @@
 import User from "../models/user.Schema"
 import asyncHandler from "../services/asyncHandler"
 import CustomError from "../utils/customError"
-import crypto from 'crypto';
+import crypto from 'crypto'
 import mailHelper from '../utils/mailHelper'
 
 
@@ -41,9 +41,11 @@ export const signUp = asyncHandler(async (req,res)=>{
 
         const token = user.getJwtToken();
         console.log(user);
-        user.password = undefined; //already in the user.Schema the password has been marked "select: false",for extra precaution
+        user.password = undefined; 
+        //already in the user.Schema the password has been marked "select: false",for extra precaution
 
-        res.cookie("token" , token , cookieOptions); // The first token is name ,second token is the above token "user.getJwtToken"
+        res.cookie("token" , token , cookieOptions); 
+        // The first token is name ie.const ,second token is the above token="user.getJwtToken()"
 
         res.status(200).json({
             success:true,
