@@ -39,8 +39,9 @@ export const createCollection = asyncHandler( async ( req, res)=>{
  * @returns User Object
  ******************************************************/
 
+
 export const updatedCollection = asyncHandler( async( req, res )=>{
-    // Updating the new collections
+    // creating the new collections
     const name = req.body
 
     // updating the existing collection
@@ -82,6 +83,7 @@ export const updatedCollection = asyncHandler( async( req, res )=>{
  * @parameters name, email, password
  * @returns User Object
  ******************************************************/
+
 
 export const deleteCollection = asyncHandler( async ( req, res)=>{
 

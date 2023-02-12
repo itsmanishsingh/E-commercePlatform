@@ -44,7 +44,7 @@ const productSchema = new mongoose.Schema(
         //Each product should be a part of collection,
         //Trying to keep the refernce of another schema
         collectionId:{
-            type:mongoose.Schema.Types.ObjectId,     //This type code is always same if you are trying to refer schema 
+            type:mongoose.Schema.Types.ObjectId,     //This code is always same if you are trying to refer schema from another Schema
             ref:"Collection"
         }
     },
