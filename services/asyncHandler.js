@@ -4,7 +4,7 @@ const asyncHandler = (fn) => async (req, res, next) => {
   } catch (error) {
     res.status(error.code || 401).json({
       success: false,
-      message: error.message,
+      message: error.message
     });
   }
 };
