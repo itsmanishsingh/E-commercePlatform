@@ -7,7 +7,7 @@ import config from "../config/index";
 
 /*
  const userSchema = new mongoose.Schema({})
-The above and below code are the same ie the "new" word is optional
+----"new" word is optional
 */
 const userSchema = mongoose.Schema(
     {
@@ -27,19 +27,19 @@ const userSchema = mongoose.Schema(
             type: String,
             required: [true, "Password is required"],
             minLength: [8, "Password must be atleast of 8 characters"],
-            select: false
+            select: false             // For not selecting during any fetching or call ,similar to "password = undefined"
         },
 
         role:{
             type : String,
-            enum : Object.values(AuthRoles),
+            enum : Object.values(AuthRoles),    // Gives values from an array [ "ADMIN" ,'ADMIM']
             default : AuthRoles.USER
         },
         forgotPasswordToken: String ,
         forgotPasswordExpiry: Date ,
     },
     {
-        timestamps : true
+        timestamps : true       // Mongoose will add two properties of type Data ie. 1. Created At  , 2. Updated At
     }
 );
 
@@ -52,8 +52,11 @@ userSchema.pre("Save", async function(next){           // We are encrypting the 
     next();
 })
 
-// Adding more features to schema
-
+// Adding more features to schema - 
+/*1.Comparing password   
+  2. Generating JWT  
+  3. Generating a long string 
+*/
 userSchema.methods = {
     // Comparing the password
     comparePassword : async function(enteredPassword){
@@ -84,7 +87,7 @@ userSchema.methods = {
                                          .update(forgotToken)
                                          .digest("hex");
 
-        this.forgotPasswordExpiry = Date.now() + 20*60*1000;
+        this.forgotPasswordExpiry = Date.now() + 20*60*1000;        // "20hr"
 
         // Step-2 return to user
         return forgotToken;
