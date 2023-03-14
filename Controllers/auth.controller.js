@@ -6,7 +6,7 @@ import mailHelper from '../utils/mailHelper'
 
 
 export const cookieOptions ={
-    expires:new Date(Date.now()+ 3 * 24 * 60 * 60 * 1000),
+    expires:new Date(Date.now()+ 3 * 24 * 60 * 60 * 1000),          // "3 days"
     httpOnly:true
     //Could be in a seperate files in utils
 }
@@ -41,8 +41,7 @@ export const signUp = asyncHandler(async (req,res)=>{
 
         const token = user.getJwtToken();
         console.log(user);
-        user.password = undefined; 
-        //already in the user.Schema the password has been marked "select: false",for extra precaution
+        user.password = undefined; //already in the user.Schema the password has been marked "select: false",for extra precaution
 
         res.cookie("token" , token , cookieOptions); 
         // The first token is name ie.const ,second token is the above token="user.getJwtToken()"

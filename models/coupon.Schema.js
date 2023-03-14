@@ -12,7 +12,7 @@ const CouponSchema = new mongoose.Schema(
         },
         active:{
             type:Boolean,
-            default:true
+            default:true        // default true means the default "0" discount is applied 
         }
     },
     {

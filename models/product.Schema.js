@@ -24,7 +24,7 @@ const productSchema = new mongoose.Schema(
         // 4- Photo
         photos:[
             {
-                secure_url:{
+                secure_url:{            // Getting the url from cloudinary platform
                     type:String,
                     required:true
                 }
@@ -41,11 +41,12 @@ const productSchema = new mongoose.Schema(
             default:0,
         },
         //7-collection connection
-        //Each product should be a part of collection,
-        //Trying to keep the refernce of another schema
+                //Each product should be a part of collection,
+                //Trying to keep the refernce of another schema
+        
         collectionId:{
             type:mongoose.Schema.Types.ObjectId,     //This code is always same if you are trying to refer schema from another Schema
-            ref:"Collection"
+            ref:"Collection"                         // Referenced to anther schema- "Schema name"
         }
     },
     {
